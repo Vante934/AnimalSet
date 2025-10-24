@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动物塑性格测试 - 发现你的内在动物</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .test-container {
+            padding: 40px;
+        }
+
+        /* 进度条样式 */
+        .progress-container {
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .progress-percentage {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer-progress 2s infinite;
+        }
+
+        @keyframes shimmer-progress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #4ecdc4;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #4ecdc4;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: #4ecdc4;
+            background: #f0fdfa;
+        }
+
+        .option.selected {
+            border-color: #4ecdc4;
+            background: #e6fffa;
+            color: #00695c;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 按钮组样式 */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #6c757d, #5a6268);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 移动端按钮优化 */
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                padding: 18px 20px;
+                font-size: 1.2em;
+            }
+        }
+
+        .results {
+            display: none;
+            padding: 40px;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result-title {
+            font-size: 2.2em;
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+
+        .result-subtitle {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .results {
+            display: none;
+            padding: 40px;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result-title {
+            font-size: 2.2em;
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+
+        .result-subtitle {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        /* 树状图布局 */
+        .tree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        /* 主要动物塑 - 顶部大图 */
+        .main-animal {
+            text-align: center;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.2);
+            border: 3px solid #ff6b6b;
+            position: relative;
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .main-animal::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .main-animal-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: block;
+            object-fit: cover;
+            border: 6px solid #ff6b6b;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .main-animal-name {
+            font-size: 2.5em;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .main-animal-percentage {
+            font-size: 3em;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .main-animal-traits {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .main-animal-description {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* 次要动物塑 - MBTI风格布局 */
+        .secondary-animals {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .secondary-animal {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e9ecef;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            min-width: 120px;
+            max-width: 140px;
+            flex: 1;
+        }
+
+        .secondary-animal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-color: #4ecdc4;
+        }
+
+        .secondary-animal-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: block;
+            object-fit: cover;
+            border: 2px solid #4ecdc4;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .secondary-animal-name {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 5px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .secondary-animal-percentage {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 8px;
+        }
+
+        .secondary-animal-traits {
+            font-size: 0.8em;
+            color: #666;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* 次要动物塑排名标签 */
+        .secondary-animal::before {
+            content: attr(data-rank);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 连接线 */
+        .connection-line {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, #ff6b6b, #4ecdc4);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .connection-line::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -3px;
+            width: 8px;
+            height: 8px;
+            background: #ff6b6b;
+            border-radius: 50%;
+        }
+
+        .connection-line::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: -3px;
+            width: 8px;
+            height: 8px;
+            background: #4ecdc4;
+            border-radius: 50%;
+        }
+
+        /* 动画效果 */
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }
+            to { text-shadow: 2px 2px 20px rgba(255, 107, 107, 0.3); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-animal {
+                padding: 30px 20px;
+            }
+            
+            .main-animal-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .main-animal-name {
+                font-size: 2em;
+            }
+            
+            .main-animal-percentage {
+                font-size: 2.5em;
+            }
+            
+            .secondary-animals {
+                gap: 10px;
+                max-width: 100%;
+            }
+            
+            .secondary-animal {
+                min-width: 100px;
+                max-width: 120px;
+                padding: 12px;
+            }
+            
+            .secondary-animal-image {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .secondary-animal-name {
+                font-size: 0.9em;
+            }
+            
+            .secondary-animal-percentage {
+                font-size: 1.2em;
+            }
+            
+            .secondary-animal-traits {
+                font-size: 0.75em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .secondary-animals {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .secondary-animal {
+                min-width: 90px;
+                max-width: 110px;
+                padding: 10px;
+            }
+        }
+
+        .restart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .restart-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .test-container {
+                padding: 20px;
+            }
+            
+            .question {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>动物塑性格测试</h1>
+            <p>通过50道科学严谨的题目，发现你内心的动物特质 - 涵盖20+种具体动物品种</p>
+        </div>
+
+        <div class="test-container" id="testContainer">
+            <!-- 测试题目将通过JavaScript动态生成 -->
+        </div>
+
+        <div class="results" id="results">
+            <div class="result-header">
+                <h2 class="result-title">🎯 你的测试结果</h2>
+                <p class="result-subtitle">基于你的选择，以下是你的动物塑分析</p>
+            </div>
+            <div id="resultContent">
+                <!-- 结果内容将通过JavaScript动态生成 -->
+            </div>
+            <button class="restart-btn" onclick="restartTest()">🔄 重新测试</button>
+        </div>
+    </div>
+
+    <script>
+        // 动物塑类型定义 - 包含具体品种
+        const animalTypes = {
+            // 猫科动物
+            lion: {
+                name: "非洲狮",
+                emoji: "🦁",
+                traits: ["领导力", "自信", "勇敢", "保护欲"],
+                description: "你具有强烈的领导气质和自信，像非洲狮一样勇敢无畏。你天生具有保护他人的本能，在团队中往往扮演领导者的角色。"
+            },
+            tiger: {
+                name: "孟加拉虎",
+                emoji: "🐅",
+                traits: ["力量", "独立", "威严", "专注"],
+                description: "你拥有强大的内在力量和独立精神，像孟加拉虎一样威严专注。你善于独自面对挑战，具有强烈的目标导向。"
+            },
+            cheetah: {
+                name: "猎豹",
+                emoji: "🐆",
+                traits: ["速度", "敏捷", "专注", "效率"],
+                description: "你行动迅速，思维敏捷，像猎豹一样追求效率。你善于快速决策，在关键时刻能够发挥出最佳状态。"
+            },
+            persian_cat: {
+                name: "波斯猫",
+                emoji: "🐱",
+                traits: ["优雅", "高贵", "独立", "神秘"],
+                description: "你气质优雅高贵，像波斯猫一样独立神秘。你注重生活品质，具有独特的审美眼光和艺术气质。"
+            },
+            siamese_cat: {
+                name: "暹罗猫",
+                emoji: "🐈",
+                traits: ["聪明", "活泼", "好奇", "社交"],
+                description: "你聪明活泼，好奇心强，像暹罗猫一样善于社交。你喜欢探索新事物，总是充满活力和好奇心。"
+            },
+            british_shorthair: {
+                name: "英国短毛猫",
+                emoji: "🐱",
+                traits: ["稳重", "温和", "忠诚", "耐心"],
+                description: "你性格稳重温和，像英国短毛猫一样忠诚耐心。你是一个可靠的伙伴，总是能够给他人带来安全感。"
+            },
+            ragdoll: {
+                name: "布偶猫",
+                emoji: "🐈",
+                traits: ["温柔", "顺从", "友善", "依赖"],
+                description: "你性格温柔顺从，像布偶猫一样友善依赖。你善于与他人建立亲密关系，总是愿意配合和妥协。"
+            },
+            maine_coon: {
+                name: "缅因猫",
+                emoji: "🐱",
+                traits: ["大度", "友善", "智慧", "适应"],
+                description: "你性格大度友善，像缅因猫一样智慧适应。你善于处理复杂的人际关系，总是能够找到平衡点。"
+            },
+            scottish_fold: {
+                name: "苏格兰折耳猫",
+                emoji: "🐈",
+                traits: ["可爱", "温和", "安静", "独特"],
+                description: "你性格可爱温和，像苏格兰折耳猫一样安静独特。你具有独特的魅力，总是能够吸引他人的注意。"
+            },
+            
+            // 犬科动物
+            golden_retriever: {
+                name: "金毛寻回犬",
+                emoji: "🐕",
+                traits: ["友善", "忠诚", "耐心", "温暖"],
+                description: "你性格友善温暖，像金毛寻回犬一样忠诚耐心。你总是愿意帮助他人，是值得信赖的朋友和伙伴。"
+            },
+            german_shepherd: {
+                name: "德国牧羊犬",
+                emoji: "🐕‍🦺",
+                traits: ["忠诚", "勇敢", "责任感", "保护"],
+                description: "你具有强烈的责任感和保护欲，像德国牧羊犬一样忠诚勇敢。你天生具有守护他人的本能，是可靠的保护者。"
+            },
+            husky: {
+                name: "哈士奇",
+                emoji: "🐺",
+                traits: ["活力", "自由", "冒险", "团队"],
+                description: "你充满活力，热爱自由和冒险，像哈士奇一样具有团队精神。你善于在团队中发挥自己的能量，带来积极的影响。"
+            },
+            poodle: {
+                name: "贵宾犬",
+                emoji: "🐩",
+                traits: ["聪明", "优雅", "适应", "学习"],
+                description: "你聪明优雅，学习能力强，像贵宾犬一样善于适应环境。你具有很高的智商和情商，能够快速掌握新技能。"
+            },
+            labrador: {
+                name: "拉布拉多",
+                emoji: "🐕",
+                traits: ["活泼", "友善", "忠诚", "工作"],
+                description: "你性格活泼友善，像拉布拉多一样忠诚工作。你是一个优秀的工作伙伴，总是能够出色地完成任务。"
+            },
+            beagle: {
+                name: "比格犬",
+                emoji: "🐕",
+                traits: ["好奇", "活泼", "友善", "嗅觉"],
+                description: "你好奇心强，性格活泼友善，像比格犬一样具有敏锐的嗅觉。你善于发现细节，总是能够找到问题的关键。"
+            },
+            chihuahua: {
+                name: "吉娃娃",
+                emoji: "🐕",
+                traits: ["勇敢", "忠诚", "警觉", "独立"],
+                description: "你虽然身材娇小，但内心勇敢，像吉娃娃一样忠诚警觉。你具有强烈的独立精神，总是能够保护自己关心的人。"
+            },
+            bulldog: {
+                name: "斗牛犬",
+                emoji: "🐕",
+                traits: ["坚韧", "勇敢", "忠诚", "稳重"],
+                description: "你性格坚韧勇敢，像斗牛犬一样忠诚稳重。你是一个可靠的伙伴，在困难面前总是能够坚持到底。"
+            },
+            border_collie: {
+                name: "边境牧羊犬",
+                emoji: "🐕",
+                traits: ["聪明", "敏捷", "专注", "领导"],
+                description: "你聪明敏捷，专注力强，像边境牧羊犬一样具有领导能力。你善于管理和协调，总是能够带领团队取得成功。"
+            },
+            shiba_inu: {
+                name: "柴犬",
+                emoji: "🐕",
+                traits: ["独立", "忠诚", "勇敢", "清洁"],
+                description: "你性格独立忠诚，像柴犬一样勇敢清洁。你注重个人空间，但对自己的责任非常认真。"
+            },
+            
+            // 鸟类
+            eagle: {
+                name: "金雕",
+                emoji: "🦅",
+                traits: ["远见", "独立", "敏锐", "高瞻远瞩"],
+                description: "你拥有敏锐的洞察力和远见卓识，像金雕一样能够俯瞰全局。你独立自主，善于从高处观察问题，具有独特的视角。"
+            },
+            peacock: {
+                name: "孔雀",
+                emoji: "🦚",
+                traits: ["美丽", "自信", "展示", "艺术"],
+                description: "你充满自信和艺术气质，像孔雀一样善于展示自己的美丽。你具有独特的审美眼光，喜欢追求美好的事物。"
+            },
+            owl: {
+                name: "雪鸮",
+                emoji: "🦉",
+                traits: ["智慧", "深思", "神秘", "洞察"],
+                description: "你具有深邃的智慧和洞察力，像雪鸮一样善于思考。你喜欢在安静中观察世界，具有独特的哲学思维。"
+            },
+            
+            // 海洋动物
+            dolphin: {
+                name: "宽吻海豚",
+                emoji: "🐬",
+                traits: ["友善", "智慧", "社交", "乐观"],
+                description: "你性格友善开朗，像宽吻海豚一样充满智慧和活力。你善于社交，总是能给周围的人带来快乐，是团队中的开心果。"
+            },
+            whale: {
+                name: "座头鲸",
+                emoji: "🐋",
+                traits: ["深沉", "智慧", "情感", "沟通"],
+                description: "你情感深沉，善于沟通，像座头鲸一样具有深邃的内心世界。你能够理解他人的情感，是很好的倾听者和沟通者。"
+            },
+            
+            // 其他动物
+            elephant: {
+                name: "非洲象",
+                emoji: "🐘",
+                traits: ["智慧", "记忆", "稳重", "责任感"],
+                description: "你拥有超强的记忆力和智慧，像非洲象一样稳重可靠。你具有很强的责任感，是值得信赖的朋友和伙伴。"
+            },
+            butterfly: {
+                name: "帝王蝶",
+                emoji: "🦋",
+                traits: ["变化", "美丽", "自由", "创造力"],
+                description: "你充满创造力和想象力，像帝王蝶一样追求美丽和自由。你善于适应变化，具有独特的艺术气质。"
+            },
+            bear: {
+                name: "棕熊",
+                emoji: "🐻",
+                traits: ["力量", "保护", "温暖", "耐心"],
+                description: "你具有强大的内在力量和温暖的保护欲，像棕熊一样给人安全感。你耐心细致，是值得依靠的伙伴。"
+            },
+            fox: {
+                name: "赤狐",
+                emoji: "🦊",
+                traits: ["机智", "灵活", "适应", "聪明"],
+                description: "你机智灵活，像赤狐一样善于适应环境。你思维敏捷，能够在复杂情况下找到最佳解决方案。"
+            },
+            panda: {
+                name: "大熊猫",
+                emoji: "🐼",
+                traits: ["温和", "可爱", "悠闲", "和平"],
+                description: "你性格温和可爱，像大熊猫一样悠闲和平。你善于享受生活的美好，总是能够给他人带来温暖和快乐。"
+            },
+            rabbit: {
+                name: "荷兰兔",
+                emoji: "🐰",
+                traits: ["敏捷", "敏感", "温柔", "警觉"],
+                description: "你敏感温柔，像荷兰兔一样敏捷警觉。你善于观察细节，对环境变化非常敏感，具有很好的直觉。"
+            }
+        };
+
+        // 测试题目 - 50道题目，无emoji
+        const questions = [
+            // 社交维度 (8题)
+            {
+                text: "在朋友的生日聚会上，你更愿意：",
+                options: [
+                    { text: "主动上台表演，成为全场焦点", animals: { lion: 3, peacock: 2, siamese_cat: 2 } },
+                    { text: "安静地坐在角落，观察大家的互动", animals: { owl: 3, persian_cat: 2, elephant: 2 } },
+                    { text: "主动和每个人聊天，确保大家都很开心", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "随机加入不同的游戏和对话", animals: { fox: 3, husky: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "在电梯里遇到陌生人时，你会：",
+                options: [
+                    { text: "主动打招呼，甚至开始闲聊", animals: { lion: 3, tiger: 2, peacock: 2 } },
+                    { text: "保持沉默，但会偷偷观察对方", animals: { owl: 3, rabbit: 2, persian_cat: 2 } },
+                    { text: "友善地微笑，等待对方先开口", animals: { golden_retriever: 3, dolphin: 2, panda: 2 } },
+                    { text: "根据对方的表情决定是否互动", animals: { fox: 3, cheetah: 2, husky: 2 } }
+                ]
+            },
+            {
+                text: "在社交媒体上，你更倾向于：",
+                options: [
+                    { text: "经常发布动态，分享生活点滴", animals: { lion: 3, peacock: 2, siamese_cat: 2 } },
+                    { text: "主要浏览和点赞，很少主动发帖", animals: { owl: 3, persian_cat: 2, elephant: 2 } },
+                    { text: "积极评论和互动，维护人际关系", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "发布创意内容，展示独特个性", animals: { butterfly: 3, fox: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "参加大型聚会时，你的行为模式是：",
+                options: [
+                    { text: "主动认识新朋友，扩大社交圈", animals: { lion: 3, tiger: 2, siamese_cat: 2 } },
+                    { text: "和熟悉的朋友待在一起", animals: { owl: 3, persian_cat: 2, elephant: 2 } },
+                    { text: "照顾每个人的感受，确保大家开心", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "在不同的小群体间游走", animals: { fox: 3, husky: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "面对社交冲突时，你的处理方式是：",
+                options: [
+                    { text: "直接面对，坚持自己的立场", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "冷静分析，寻找最佳解决方案", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "寻求妥协，维护和谐关系", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "灵活应对，避免正面冲突", animals: { fox: 3, butterfly: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "在团队讨论中，你更愿意：",
+                options: [
+                    { text: "主导讨论方向，提出关键观点", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "仔细倾听，偶尔提出深度见解", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "促进大家参与，协调不同意见", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "灵活调整观点，适应团队需求", animals: { fox: 3, cheetah: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "面对陌生环境时，你的第一反应是：",
+                options: [
+                    { text: "主动探索，快速适应", animals: { fox: 3, cheetah: 2, husky: 2 } },
+                    { text: "仔细观察，谨慎行动", animals: { owl: 3, rabbit: 2, persian_cat: 2 } },
+                    { text: "寻求帮助，建立联系", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "保持开放，享受变化", animals: { butterfly: 3, panda: 2, peacock: 2 } }
+                ]
+            },
+            {
+                text: "在朋友圈中，你通常扮演的角色是：",
+                options: [
+                    { text: "领导者，制定计划和方向", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "智者，提供建议和指导", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "协调者，维护群体和谐", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "开心果，带来欢乐和活力", animals: { butterfly: 3, peacock: 2, siamese_cat: 2 } }
+                ]
+            },
+            
+            // 决策维度 (8题)
+            {
+                text: "和朋友一起点外卖时，你会：",
+                options: [
+                    { text: "直接决定点什么，相信自己的选择", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "分析每个人的喜好，做出最优选择", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "征求大家意见，选择最受欢迎的", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "随机选择，或者尝试新口味", animals: { fox: 3, butterfly: 2, cheetah: 2 } }
+                ]
+            },
+            {
+                text: "面对突发情况时，你的第一反应是：",
+                options: [
+                    { text: "立即行动，快速解决问题", animals: { lion: 3, tiger: 2, cheetah: 2 } },
+                    { text: "先分析情况，再制定应对策略", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "寻求帮助，和大家一起想办法", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "保持冷静，相信事情会自然解决", animals: { butterfly: 3, panda: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "制定新年计划时，你更倾向于：",
+                options: [
+                    { text: "设定雄心勃勃的目标，挑战自己", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "制定学习计划，提升知识和技能", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "关注人际关系，帮助身边的人", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "尝试新体验，探索生活的可能性", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "做重要决定时，你更依赖：",
+                options: [
+                    { text: "直觉和第一感觉", animals: { lion: 2, husky: 3, rabbit: 2 } },
+                    { text: "逻辑分析和数据", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "他人的意见和建议", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "灵活性和适应性", animals: { fox: 3, butterfly: 2, cheetah: 2 } }
+                ]
+            },
+            {
+                text: "面对多个选择时，你的决策风格是：",
+                options: [
+                    { text: "快速选择，相信自己的判断", animals: { lion: 3, tiger: 2, cheetah: 2 } },
+                    { text: "详细分析每个选项的利弊", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "咨询他人意见，综合考虑", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "保持开放，随时调整选择", animals: { fox: 3, butterfly: 2, panda: 2 } }
+                ]
+            },
+            {
+                text: "在投资理财方面，你的态度是：",
+                options: [
+                    { text: "敢于冒险，追求高收益", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "谨慎分析，稳健投资", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "听取专家建议，集体决策", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "灵活调整，适应市场变化", animals: { fox: 3, cheetah: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "面对职业选择时，你更看重：",
+                options: [
+                    { text: "挑战性和发展潜力", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "稳定性和专业深度", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "团队氛围和人际关系", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "创新性和自由度", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "处理复杂问题时，你的方法是：",
+                options: [
+                    { text: "直接面对，逐个击破", animals: { lion: 3, tiger: 2, bear: 2 } },
+                    { text: "系统分析，制定详细计划", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "寻求团队合作，集思广益", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "灵活应对，随机应变", animals: { fox: 3, butterfly: 2, cheetah: 2 } }
+                ]
+            },
+            
+            // 工作风格维度 (8题)
+            {
+                text: "理想的工作环境是：",
+                options: [
+                    { text: "高层办公室，俯瞰城市全景", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "安静的图书馆或独立工作室", animals: { owl: 3, elephant: 2, persian_cat: 2 } },
+                    { text: "开放式的团队协作空间", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "充满创意和艺术气息的环境", animals: { butterfly: 3, peacock: 2, cheetah: 2 } }
+                ]
+            },
+            {
+                text: "在团队项目中，你更愿意：",
+                options: [
+                    { text: "担任项目经理，统筹全局", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "提供专业建议，解决技术难题", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "协调团队关系，促进合作", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "负责执行，快速完成任务", animals: { fox: 3, cheetah: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "面对截止日期时，你会：",
+                options: [
+                    { text: "提前完成，确保质量", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "制定详细计划，按部就班", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "寻求团队支持，共同完成", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "在压力下激发创意灵感", animals: { butterfly: 3, fox: 2, cheetah: 2 } }
+                ]
+            },
+            {
+                text: "学习新技能时，你的方式是：",
+                options: [
+                    { text: "通过实践和体验学习", animals: { lion: 2, bear: 3, cheetah: 2 } },
+                    { text: "系统学习理论知识", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "与他人讨论和交流", animals: { dolphin: 3, golden_retriever: 2, siamese_cat: 2 } },
+                    { text: "创造性地探索新方法", animals: { butterfly: 3, peacock: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "面对工作压力时，你的应对方式是：",
+                options: [
+                    { text: "迎难而上，化压力为动力", animals: { lion: 3, tiger: 2, bear: 2 } },
+                    { text: "冷静分析，寻找解决方案", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "寻求同事支持，共同面对", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "保持乐观，相信会好转", animals: { butterfly: 3, panda: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "在创新项目中，你更擅长：",
+                options: [
+                    { text: "领导创新方向，推动变革", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "深入研究，提供技术支撑", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "协调团队，促进合作创新", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "灵活适应，快速迭代", animals: { fox: 3, butterfly: 2, cheetah: 2 } }
+                ]
+            },
+            {
+                text: "面对失败时，你的态度是：",
+                options: [
+                    { text: "总结经验，重新出发", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "深入分析失败原因", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "寻求他人安慰和支持", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "保持乐观，相信下次会更好", animals: { butterfly: 3, fox: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "在团队中，你希望被认可的是：",
+                options: [
+                    { text: "领导能力和决策力", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "专业知识和深度思考", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "团队合作和人际协调", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "创造力和独特贡献", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            
+            // 情感维度 (8题)
+            {
+                text: "心情不好时，你更愿意：",
+                options: [
+                    { text: "独自面对，通过运动释放压力", animals: { lion: 3, tiger: 2, bear: 2 } },
+                    { text: "阅读或思考，寻找内心平静", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "找朋友倾诉，寻求安慰", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "听音乐或做喜欢的事转移注意力", animals: { butterfly: 3, peacock: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "获得成功时，你的第一反应是：",
+                options: [
+                    { text: "享受胜利的喜悦，准备下一个挑战", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "总结经验，思考如何做得更好", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "和团队分享喜悦，感谢大家的支持", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "保持谦逊，继续追求新的目标", animals: { butterfly: 3, fox: 2, panda: 2 } }
+                ]
+            },
+            {
+                text: "表达爱意时，你更倾向于：",
+                options: [
+                    { text: "用行动证明，保护所爱的人", animals: { lion: 3, tiger: 2, bear: 2 } },
+                    { text: "写深情的文字或信件", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "给予温暖的拥抱和关怀", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "创造浪漫的惊喜和回忆", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "面对批评时，你的反应是：",
+                options: [
+                    { text: "直接回应，坚持自己的观点", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "冷静分析批评的合理性", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "考虑他人的感受，寻求理解", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "灵活调整，避免冲突", animals: { fox: 3, butterfly: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "在人际关系中，你最重视的是：",
+                options: [
+                    { text: "忠诚和信任", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "理解和共鸣", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "温暖和支持", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "自由和独立", animals: { butterfly: 3, fox: 2, cheetah: 2 } }
+                ]
+            },
+            {
+                text: "面对孤独时，你的处理方式是：",
+                options: [
+                    { text: "享受独处时光，自我反思", animals: { owl: 3, elephant: 2, persian_cat: 2 } },
+                    { text: "主动联系朋友，寻求陪伴", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "通过活动充实自己", animals: { lion: 3, tiger: 2, cheetah: 2 } },
+                    { text: "保持开放心态，等待机会", animals: { butterfly: 3, fox: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "在情感表达方面，你更倾向于：",
+                options: [
+                    { text: "直接表达，不拐弯抹角", animals: { lion: 3, tiger: 2, golden_retriever: 2 } },
+                    { text: "深思熟虑，选择合适的时机", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "温和表达，考虑他人感受", animals: { dolphin: 3, panda: 2, rabbit: 2 } },
+                    { text: "创意表达，用独特的方式", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "面对挫折时，你最能依靠的是：",
+                options: [
+                    { text: "内在的勇气和力量", animals: { lion: 3, tiger: 2, bear: 2 } },
+                    { text: "冷静的思考和判断", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "朋友和家人的支持", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "乐观的心态和适应力", animals: { butterfly: 3, panda: 2, rabbit: 2 } }
+                ]
+            },
+            
+            // 生活方式维度 (8题)
+            {
+                text: "理想的假期是：",
+                options: [
+                    { text: "挑战极限运动，征服高峰", animals: { tiger: 2, husky: 3, cheetah: 2 } },
+                    { text: "在安静的地方读书思考", animals: { owl: 3, elephant: 2, persian_cat: 2 } },
+                    { text: "和家人朋友一起度过温馨时光", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "探索艺术文化，体验不同生活", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "早晨醒来时，你更愿意：",
+                options: [
+                    { text: "立即起床运动，充满活力", animals: { lion: 3, tiger: 2, cheetah: 2 } },
+                    { text: "慢慢享受咖啡，规划一天", animals: { owl: 3, elephant: 2, persian_cat: 2 } },
+                    { text: "和家人朋友聊天，分享心情", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "听音乐或做喜欢的事，放松心情", animals: { butterfly: 3, panda: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "选择娱乐方式时，你更喜欢：",
+                options: [
+                    { text: "竞技类游戏，享受胜利的快感", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "策略类游戏，锻炼思维能力", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "多人合作游戏，增进友谊", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "创意类游戏，发挥想象力", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "在饮食方面，你的偏好是：",
+                options: [
+                    { text: "尝试各种新奇美食", animals: { lion: 3, tiger: 2, fox: 2 } },
+                    { text: "注重营养搭配和健康", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "喜欢与朋友分享美食", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "追求精致和美感", animals: { butterfly: 3, peacock: 2, persian_cat: 2 } }
+                ]
+            },
+            {
+                text: "面对新科技时，你的态度是：",
+                options: [
+                    { text: "积极尝试，成为早期使用者", animals: { lion: 3, tiger: 2, cheetah: 2 } },
+                    { text: "谨慎评估，了解后再使用", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "跟随大众，和大家一起使用", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "保持开放，灵活适应", animals: { fox: 3, butterfly: 2, poodle: 2 } }
+                ]
+            },
+            {
+                text: "在时间管理方面，你的风格是：",
+                options: [
+                    { text: "严格按计划执行，高效完成", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "详细规划，有条不紊", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "灵活调整，适应变化", animals: { fox: 3, butterfly: 2, cheetah: 2 } },
+                    { text: "保持平衡，注重质量", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } }
+                ]
+            },
+            {
+                text: "面对环境变化时，你的适应方式是：",
+                options: [
+                    { text: "主动改变，快速适应", animals: { fox: 3, cheetah: 2, husky: 2 } },
+                    { text: "观察分析，谨慎调整", animals: { owl: 3, rabbit: 2, persian_cat: 2 } },
+                    { text: "寻求支持，共同适应", animals: { dolphin: 3, golden_retriever: 2, whale: 2 } },
+                    { text: "保持开放，享受变化", animals: { butterfly: 3, panda: 2, peacock: 2 } }
+                ]
+            },
+            {
+                text: "在健康管理方面，你更注重：",
+                options: [
+                    { text: "体能训练和力量提升", animals: { lion: 3, tiger: 2, bear: 2 } },
+                    { text: "知识学习和智力锻炼", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "社交活动和情感健康", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "创意表达和心灵成长", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            
+            // 价值观维度 (10题)
+            {
+                text: "你认为人生最重要的是：",
+                options: [
+                    { text: "成就和影响力", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "知识和智慧", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "爱和人际关系", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "自由和创造力", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "你最珍视的品质是：",
+                options: [
+                    { text: "勇气和坚韧", animals: { lion: 3, tiger: 2, bear: 2 } },
+                    { text: "智慧和洞察力", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "善良和同理心", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "创造力和独特性", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "你希望别人记住你的是：",
+                options: [
+                    { text: "你的成就和领导力", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "你的智慧和深度", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "你的友善和温暖", animals: { golden_retriever: 3, panda: 2, rabbit: 2 } },
+                    { text: "你的创造力和独特性", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "面对世界问题时，你更愿意：",
+                options: [
+                    { text: "成为领导者，推动变革", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "深入研究，提供解决方案", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "团结大家，共同行动", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "用创意和艺术传播理念", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "在道德选择面前，你更倾向于：",
+                options: [
+                    { text: "坚持原则，维护正义", animals: { lion: 3, tiger: 2, german_shepherd: 2 } },
+                    { text: "理性分析，权衡利弊", animals: { eagle: 3, owl: 2, elephant: 2 } },
+                    { text: "考虑他人感受，寻求和谐", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "保持开放，灵活应对", animals: { fox: 3, butterfly: 2, rabbit: 2 } }
+                ]
+            },
+            {
+                text: "面对传统和现代时，你的态度是：",
+                options: [
+                    { text: "尊重传统，但勇于创新", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "深入研究传统，理解其价值", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "平衡传统与现代，和谐发展", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "拥抱变化，追求进步", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "在个人成长方面，你更注重：",
+                options: [
+                    { text: "能力提升和成就获得", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "知识积累和智慧增长", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "人际关系和情感发展", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "创造力发挥和个性表达", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "面对社会不公时，你的反应是：",
+                options: [
+                    { text: "主动发声，推动改变", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "深入思考，寻找根源", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "团结他人，共同行动", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "用创意方式表达观点", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "在追求目标时，你更看重：",
+                options: [
+                    { text: "结果和成就", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "过程和成长", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "合作和共赢", animals: { dolphin: 3, golden_retriever: 2, husky: 2 } },
+                    { text: "创新和突破", animals: { butterfly: 3, peacock: 2, fox: 2 } }
+                ]
+            },
+            {
+                text: "面对未来时，你的态度是：",
+                options: [
+                    { text: "积极规划，主动创造", animals: { lion: 3, tiger: 2, eagle: 2 } },
+                    { text: "理性分析，谨慎准备", animals: { owl: 3, elephant: 2, whale: 2 } },
+                    { text: "保持乐观，相信美好", animals: { dolphin: 3, golden_retriever: 2, panda: 2 } },
+                    { text: "保持开放，拥抱变化", animals: { butterfly: 3, fox: 2, cheetah: 2 } }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let animalScores = {};
+
+        // 初始化测试
+        function initTest() {
+            const testContainer = document.getElementById('testContainer');
+            testContainer.innerHTML = '';
+            
+            // 重置数据
+            currentQuestion = 0;
+            answers = {};
+            animalScores = {};
+            
+            // 初始化动物分数
+            Object.keys(animalTypes).forEach(animal => {
+                animalScores[animal] = 0;
+            });
+            
+            showQuestion();
+        }
+
+        // 显示当前题目
+        function showQuestion() {
+            const testContainer = document.getElementById('testContainer');
+            const question = questions[currentQuestion];
+            
+            // 计算进度
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            
+            testContainer.innerHTML = `
+                <!-- 进度条 -->
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <div class="progress-text">问题 ${currentQuestion + 1} / ${questions.length}</div>
+                        <div class="progress-percentage">${Math.round(progress)}%</div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: ${progress}%"></div>
+                    </div>
+                </div>
+                
+                <!-- 题目内容 -->
+                <div class="question">
+                    <div class="question-text">${question.text}</div>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})">
+                                <input type="radio" name="q${currentQuestion}" value="${index}" id="option${index}">
+                                <label for="option${index}">${option.text}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- 按钮组 -->
+                <div class="button-group">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>
+                        ← 上一题
+                </button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
+                        ${currentQuestion === questions.length - 1 ? '查看结果' : '下一题 →'}
+                    </button>
+                </div>
+            `;
+        }
+
+        // 选择选项
+        function selectOption(optionIndex) {
+            // 清除之前的选择
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // 选中当前选项
+            options[optionIndex].classList.add('selected');
+            document.getElementById(`option${optionIndex}`).checked = true;
+            
+            // 启用下一题按钮
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+            }
+            
+            // 保存答案
+            answers[currentQuestion] = optionIndex;
+        }
+
+        // 上一题
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        // 下一题
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                calculateResults();
+            }
+        }
+
+        // 计算结果
+        function calculateResults() {
+            // 计算每个动物的得分
+            questions.forEach((question, qIndex) => {
+                const selectedOption = question.options[answers[qIndex]];
+                Object.keys(selectedOption.animals).forEach(animal => {
+                    animalScores[animal] += selectedOption.animals[animal];
+                });
+            });
+
+            // 计算百分比
+            const totalScore = Object.values(animalScores).reduce((sum, score) => sum + score, 0);
+            const percentages = {};
+            Object.keys(animalScores).forEach(animal => {
+                percentages[animal] = Math.round((animalScores[animal] / totalScore) * 100);
+            });
+
+            // 按分数排序
+            const sortedAnimals = Object.keys(percentages).sort((a, b) => percentages[b] - percentages[a]);
+
+            // 显示结果
+            showResults(sortedAnimals, percentages);
+        }
+
+        // 动物图片映射
+        const animalImages = {
+            lion: "https://images.unsplash.com/photo-1552410260-0fd9b577afa6?w=300&h=300&fit=crop&crop=face",
+            tiger: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=300&h=300&fit=crop&crop=face",
+            cheetah: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=300&h=300&fit=crop&crop=face",
+            persian_cat: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=300&fit=crop&crop=face",
+            siamese_cat: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=300&h=300&fit=crop&crop=face",
+            british_shorthair: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=300&fit=crop&crop=face",
+            ragdoll: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=300&h=300&fit=crop&crop=face",
+            maine_coon: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300&h=300&fit=crop&crop=face",
+            scottish_fold: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=300&h=300&fit=crop&crop=face",
+            golden_retriever: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=300&fit=crop&crop=face",
+            german_shepherd: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=300&h=300&fit=crop&crop=face",
+            husky: "https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=300&h=300&fit=crop&crop=face",
+            poodle: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=300&h=300&fit=crop&crop=face",
+            labrador: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=300&fit=crop&crop=face",
+            beagle: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=300&fit=crop&crop=face",
+            chihuahua: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=300&fit=crop&crop=face",
+            bulldog: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=300&fit=crop&crop=face",
+            border_collie: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=300&fit=crop&crop=face",
+            shiba_inu: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=300&h=300&fit=crop&crop=face",
+            eagle: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop&crop=face",
+            peacock: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop&crop=face",
+            owl: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=300&fit=crop&crop=face",
+            dolphin: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=300&h=300&fit=crop&crop=face",
+            whale: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=300&h=300&fit=crop&crop=face",
+            elephant: "https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=300&h=300&fit=crop&crop=face",
+            butterfly: "https://images.unsplash.com/photo-1444927714506-8492d94b4e3d?w=300&h=300&fit=crop&crop=face",
+            bear: "https://images.unsplash.com/photo-1544025162-d76694265947?w=300&h=300&fit=crop&crop=face",
+            fox: "https://images.unsplash.com/photo-1551717743-49959800b1f6?w=300&h=300&fit=crop&crop=face",
+            panda: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=300&h=300&fit=crop&crop=face",
+            rabbit: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=300&h=300&fit=crop&crop=face"
+        };
+
+        // 显示结果 - MBTI风格树状图布局
+        function showResults(sortedAnimals, percentages) {
+            const testContainer = document.getElementById('testContainer');
+            const results = document.getElementById('results');
+            const resultContent = document.getElementById('resultContent');
+
+            testContainer.style.display = 'none';
+            results.style.display = 'block';
+
+            // 获取最高占比的动物
+            const primaryAnimal = sortedAnimals[0];
+            const primaryPercentage = percentages[primaryAnimal];
+            const primaryAnimalData = animalTypes[primaryAnimal];
+            const primaryImage = animalImages[primaryAnimal];
+
+            // 获取次要动物塑（限制为5个，按占比排序）
+            const otherAnimals = sortedAnimals.slice(1, 6); // 最多显示5个次要动物塑
+
+            // 构建MBTI风格树状图HTML
+            let resultHTML = `
+                <div class="tree-container">
+                    <!-- 主要动物塑 - 顶部大图 -->
+                    <div class="main-animal">
+                        <img src="${primaryImage}" alt="${primaryAnimalData.name}" class="main-animal-image" onerror="this.style.display='none'">
+                        <div class="main-animal-name">${primaryAnimalData.name}</div>
+                        <div class="main-animal-percentage">${primaryPercentage}%</div>
+                        <div class="main-animal-traits">${primaryAnimalData.traits.join('、')}</div>
+                        <div class="main-animal-description">${primaryAnimalData.description}</div>
+                    </div>
+                    
+                    <!-- 连接线 -->
+                    <div class="connection-line"></div>
+                    
+                    <!-- 次要动物塑 - MBTI风格布局 -->
+                    <div class="secondary-animals">
+            `;
+
+            // 添加次要动物塑（最多6个）
+            otherAnimals.forEach((animal, index) => {
+                const animalData = animalTypes[animal];
+                const percentage = percentages[animal];
+                const image = animalImages[animal];
+                const rank = index + 2; // 排名从2开始
+                
+                resultHTML += `
+                    <div class="secondary-animal" data-rank="${rank}">
+                        <img src="${image}" alt="${animalData.name}" class="secondary-animal-image" onerror="this.style.display='none'">
+                        <div class="secondary-animal-name">${animalData.name}</div>
+                        <div class="secondary-animal-percentage">${percentage}%</div>
+                        <div class="secondary-animal-traits">${animalData.traits.join('、')}</div>
+                        </div>
+                `;
+            });
+
+            resultHTML += `
+                        </div>
+                    </div>
+                `;
+
+            resultContent.innerHTML = resultHTML;
+        }
+
+        // 重新开始测试
+        function restartTest() {
+            const testContainer = document.getElementById('testContainer');
+            const results = document.getElementById('results');
+            
+            testContainer.style.display = 'block';
+            results.style.display = 'none';
+            
+            initTest();
+        }
+
+        // 页面加载完成后初始化测试
+        document.addEventListener('DOMContentLoaded', function() {
+            initTest();
+        });
+    </script>
+</body>
+</html>
+
+

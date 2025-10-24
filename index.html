@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动物塑性格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #4ecdc4;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .test-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.3em;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .features {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .features h3 {
+            color: #4ecdc4;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .features li:before {
+            content: "🐾 ";
+            margin-right: 10px;
+        }
+
+        .animals {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .animal-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .animal-card h4 {
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        .animal-card p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .animals {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 动物塑性格测试</h1>
+            <p>发现你的内在动物，探索真实的自己</p>
+        </div>
+
+        <div class="features">
+            <h3>✨ 测试特色</h3>
+            <ul>
+                <li>50道科学题目，多维度性格分析</li>
+                <li>29种动物塑，包含猫科、犬科等</li>
+                <li>MBTI风格结果展示</li>
+                <li>进度条导航，支持前进后退</li>
+                <li>响应式设计，适配所有设备</li>
+            </ul>
+        </div>
+
+        <a href="animal_personality_test.html" class="test-btn">
+            🚀 开始测试
+        </a>
+
+        <div class="animals">
+            <div class="animal-card">
+                <h4>🦁 非洲狮</h4>
+                <p>领导力、自信、勇敢、保护欲</p>
+            </div>
+            <div class="animal-card">
+                <h4>🐕 金毛寻回犬</h4>
+                <p>友善、忠诚、耐心、温暖</p>
+            </div>
+            <div class="animal-card">
+                <h4>🐱 波斯猫</h4>
+                <p>优雅、高贵、独立、神秘</p>
+            </div>
+            <div class="animal-card">
+                <h4>🦅 金雕</h4>
+                <p>远见、独立、敏锐、高瞻远瞩</p>
+            </div>
+            <div class="animal-card">
+                <h4>🐼 大熊猫</h4>
+                <p>温和、可爱、悠闲、和平</p>
+            </div>
+            <div class="animal-card">
+                <h4>🐬 宽吻海豚</h4>
+                <p>友善、智慧、社交、乐观</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 动物塑性格测试 | 基于科学心理学理论设计</p>
+            <p>如果无法访问完整测试，请尝试使用VPN或联系管理员</p>
+        </div>
+    </div>
+
+    <script>
+        // 检查完整测试页面是否可访问
+        function checkTestPage() {
+            fetch('animal_personality_test.html')
+                .then(response => {
+                    if (response.ok) {
+                        console.log('完整测试页面可访问');
+                    } else {
+                        console.log('完整测试页面不可访问');
+                        alert('完整测试页面暂时不可访问，请稍后重试或使用VPN');
+                    }
+                })
+                .catch(error => {
+                    console.log('网络错误:', error);
+                });
+        }
+
+        // 页面加载时检查
+        window.onload = function() {
+            checkTestPage();
+        };
+    </script>
+</body>
+</html>
